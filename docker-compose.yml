@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+
+  database:
+    image: mysql:latest
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    # command: --default-authentication-plugin=mysql_native_password
+    # restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: psw1234
+      MYSQL_DATABASE: u65042380107
+      MYSQL_USER: benz
+      MYSQL_PASSWORD: psw1234
+      # MYSQL_ALLOW_EMPTY_PASSWORD: yes
+    ports:
+      - 3307:3306
+    volumes:
+      - ./student.sql:/docker-entrypoint-initdb.d/student.sql
+    # restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - mynetwork
+  backend:
+    build: ./backend/
+    ports:
+      - 5000:5000
+    depends_on:
+      - database
+    environment:
+      DB_HOST: database
+      DB_USER: benz
+      DB_PASSWORD: psw1234
+      DB_DATABASE: u65042380107
+    networks:
+      - mynetwork
+  frontend:
+    build: ./frontend/
+    ports:
+      - 7243:3000
+    environment:
+      - http://localhost:5000
+    networks:
+      - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
