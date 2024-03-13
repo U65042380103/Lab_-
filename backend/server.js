@@ -19,15 +19,15 @@ const db = mysql.createConnection({
 })
 
 app.get('/',(req,res)=>{
-    const sql = "SELECT * FROM `student`";
+    const sql = "SELECT * FROM `recipe`";
     db.query(sql, (err, data)=>{
         if(err) return res.json(err);
         return res.json(data);
     })
 })
 
-app.get('/major',(req,res)=>{
-    const sql = "SELECT * FROM `major`";
+app.get('/region',(req,res)=>{
+    const sql = "SELECT * FROM `region`";
     const id = req.params.id;
     db.query(sql, (err, data)=>{
         if(err) return res.json(err);
@@ -36,13 +36,13 @@ app.get('/major',(req,res)=>{
 })
 
 app.post('/create',(req,res)=>{
-    const sql = "INSERT INTO student (`id`,`fname`,`lname`,`phone`,`major_id`) VALUES(?)";
+    const sql = "INSERT INTO recipe (`id`,`name`,`ingredient`,`howto`,`region_id`) VALUES(?)";
     const values = [
         req.body.id,
-        req.body.fname,
-        req.body.lname,
-        req.body.phone,
-        req.body.major_id,
+        req.body.name,
+        req.body.ingredient,
+        req.body.howto,
+        req.body.region_id,
     ]
     db.query(sql, [values],(err, data)=>{
         if(err) return res.json(err);
@@ -51,13 +51,13 @@ app.post('/create',(req,res)=>{
 })
 
 app.put('/update/:id',(req,res)=>{
-    const sql = "UPDATE student set `fname` = ?,`lname` = ?,`phone` = ?,`major_id` = ? WHERE id = ?";
+    const sql = "UPDATE recipe set `name` = ?,`ingredient` = ?,`howto` = ?,`region_id` = ? WHERE id = ?";
     const id = req.params.id;
     const values = [
-        req.body.fname,
-        req.body.lname,
-        req.body.phone,
-        req.body.major_id,
+        req.body.name,
+        req.body.ingredient,
+        req.body.howto,
+        req.body.region_id,
     ]
     db.query(sql, [...values, id],(err, data)=>{
         if(err) return res.json(err);
@@ -66,7 +66,7 @@ app.put('/update/:id',(req,res)=>{
 })
 
 app.delete('/delete/:id',(req,res)=>{
-    const sql = "DELETE FROM student WHERE ID = ?";
+    const sql = "DELETE FROM recipe WHERE ID = ?";
     const id = req.params.id;
     db.query(sql, [id],(err, data)=>{
         if(err) return res.json(err);

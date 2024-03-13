@@ -10,14 +10,14 @@ services:
     # restart: always
     environment:
       MYSQL_ROOT_PASSWORD: psw1234
-      MYSQL_DATABASE: u65042380107
-      MYSQL_USER: benz
+      MYSQL_DATABASE: cookbook
+      MYSQL_USER: nudpob
       MYSQL_PASSWORD: psw1234
       # MYSQL_ALLOW_EMPTY_PASSWORD: yes
     ports:
-      - 3307:3306
+      - 3103:3103
     volumes:
-      - ./student.sql:/docker-entrypoint-initdb.d/student.sql
+      - ./cookbook.sql:/docker-entrypoint-initdb.d/cookbook.sql
     # restart: always
     command: --default-authentication-plugin=mysql_native_password
     networks:
@@ -30,15 +30,15 @@ services:
       - database
     environment:
       DB_HOST: database
-      DB_USER: benz
+      DB_USER: nudpob
       DB_PASSWORD: psw1234
-      DB_DATABASE: u65042380107
+      DB_DATABASE: cookbook
     networks:
       - mynetwork
   frontend:
     build: ./frontend/
     ports:
-      - 7243:3000
+      - 3000:3000
     environment:
       - http://localhost:5000
     networks:
